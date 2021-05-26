@@ -118,7 +118,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['MTSP_9', 'MTSP_ori', 'MTSP_ori_10w', 'minmax-mtsp', 'minmax-mtsp_10w', 'p_center', 'p_center_10w'],
+        choices=['MTSP_ori', 'MTSP_ori_10w', 'minmax-mtsp', 'minmax-mtsp_10w'],
     )
     parser.add_argument(
         '-g', '--gpu',
@@ -144,18 +144,12 @@ if __name__ == '__main__':
     top_k = [1, 3, 5, 10]
 
     problem_folders = {
-        'MTSP_9': 'MTSP_9/9_3',
         'MTSP_ori': 'MTSP_ori/9_3',
         'MTSP_ori_10w': 'MTSP_ori_10w/9_3',
-        'minmax-mtsp_10w': 'minmax-mtsp_10w/9_3',
         'minmax-mtsp': 'minmax-mtsp/9_3',
-        'p_center': 'p_center/100_10_5',
-        'p_center_10w': 'p_center_10w/100_10_5'
+        'minmax-mtsp_10w': 'minmax-mtsp_10w/9_3',
     }
     problem_folder = problem_folders[args.problem]
-
-    # if args.problem == 'setcover':
-    #     gcnn_models += ['mean_convolution', 'no_prenorm']
 
     result_file = f"results/{args.problem}_test_{time.strftime('%Y%m%d-%H%M%S')}"
 

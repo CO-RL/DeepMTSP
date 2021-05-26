@@ -111,7 +111,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['MTSP_ori', 'MTSP_9', 'MTSP_10w', 'MTSP_ori_10w', 'minmax-mtsp', 'minmax-mtsp_10w', 'facilities', 'p_center', 'p_center_10w'],
+        choices=['MTSP_ori', 'MTSP_ori_10w', 'minmax-mtsp', 'minmax-mtsp_10w'],
     )
     parser.add_argument(
         '-m', '--model',
@@ -149,13 +149,8 @@ if __name__ == '__main__':
     problem_folders = {
         'MTSP_ori': 'MTSP_ori/9_3',
         'MTSP_ori_10w': 'MTSP_ori_10w/9_3',
-        'MTSP_9': 'MTSP_9/9_3',
-        'MTSP_10w': 'MTSP_10w/9_3',
-        'minmax-mtsp_10w': 'minmax-mtsp_10w/9_3',
         'minmax-mtsp': 'minmax-mtsp/9_3',
-        'facilities': 'facilities/100_100_5',
-        'p_center': 'p_center/100_10_5',
-        'p_center_10w': 'p_center_10w/100_10_5',
+        'minmax-mtsp_10w': 'minmax-mtsp_10w/9_3',
     }
     
     problem_folder = problem_folders[args.problem]

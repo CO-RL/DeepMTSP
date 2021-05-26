@@ -44,7 +44,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['MTSP_9', 'MTSP_ori', 'MTSP_ori_10w', 'minmax-mtsp', 'minmax-mtsp_10w', 'p_center', 'p_center_10w'],
+        choices=['MTSP_ori', 'MTSP_ori_10w', 'minmax-mtsp', 'minmax-mtsp_10w'],
     )
     parser.add_argument(
         '-m', '--model',
@@ -63,23 +63,17 @@ if __name__ == '__main__':
     feats_type = 'nbr_maxminmean'
 
     problem_folders = {
-        'MTSP_9': 'MTSP_9/9_3',
         'MTSP_ori': 'MTSP_ori/9_3',
         'MTSP_ori_10w': 'MTSP_ori_10w/9_3',
-        'minmax-mtsp_10w': 'minmax-mtsp_10w/9_3',
         'minmax-mtsp': 'minmax-mtsp/9_3',
-        'MTSP_12': 'MTSP_12/12_3',
-        'MTSP_15': 'MTSP_15/15_3',
-        'p_center': 'p_center/100_10_5',
-        'p_center_10w': 'p_center_10w/100_10_5'
+        'minmax-mtsp_10w': 'minmax-mtsp_10w/9_3',
     }
     problem_folder = problem_folders[args.problem]
 
     if args.model == 'extratrees':
         train_max_size = 250000
         valid_max_size = 100000
-        feat_type = 'khalil'
-        # feat_type = 'gcnn_agg'
+        feat_type = 'gcnn_agg'
         feat_qbnorm = False
         feat_augment = False
         label_type = 'scores'
@@ -88,7 +82,6 @@ if __name__ == '__main__':
         train_max_size = 250000
         valid_max_size = 100000
         feat_type = 'khalil'
-        # feat_type = 'gcnn_agg'
         feat_qbnorm = True
         feat_augment = False
         label_type = 'bipartite_ranks'
@@ -97,7 +90,6 @@ if __name__ == '__main__':
         train_max_size = 250000
         valid_max_size = 100000
         feat_type = 'khalil'
-        # feat_type = 'gcnn_agg'
         feat_qbnorm = True
         feat_augment = True
         label_type = 'bipartite_ranks'

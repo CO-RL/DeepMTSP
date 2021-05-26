@@ -235,7 +235,6 @@ def generate_MTSP(random, filename, n_customers,m_salesman):
                 if i != j:
                     file.write(f" x_{i+1}_{j+1} ")
 
-
 def generate_MTSP1(random, filename, n_customers,m_salesman):
     """
     Generate a MTSP problem following
@@ -465,236 +464,6 @@ def generate_MTSP2(random, filename, n_customers,m_salesman):
         #file.write("".join([f" y_{j+1}" for j in range(n_facilities)]))
         file.write("\nEnd")
 
-def generate_p_median(random, filename, n_customers, n_facilities, p):
-    """
-    Generate a p-median Problem following
-    
-    Originally Published:
-        S. L. Hakimi. 1964. Optimum Locations of Switching Centers and 
-        the Absolute Centers and Medians of a Graph. Operations Research.
-        12 (3):450-459.
-    Adapted from:
-            -1-
-        ReVelle, C.S. and Swain, R.W. 1970. Central facilities location.
-        Geographical Analysis. 2(1), 30-42.
-            -2-
-        Toregas, C., Swain, R., ReVelle, C., Bergman, L. 1971. The Location
-        of Emergency Service Facilities. Operations Research. 19 (6),
-        1363-1373.
-            - 3 -
-        Daskin, M. (1995). Network and discrete location: Models, algorithms,
-        and applications. New York: John Wiley and Sons, Inc.
-    Saves it as a CPLEX LP file.
-
-    Parameters
-    ----------
-    random : numpy.random.RandomState
-        A random number generator.
-    filename : str
-        Path to the file to save.
-    n_customers: int
-        The desired number of customers.
-    n_facilities: int
-        The desired number of facilities.
-    ratio: float
-        The desired capacity / demand ratio.
-    """
-    #rng = np.random.RandomState(1)
-    
-    c_x = rng.rand(n_customers)
-    c_y = rng.rand(n_customers)
-
-    f_x = rng.rand(n_facilities)
-    f_y = rng.rand(n_facilities)
-
-    #customers = generate_candidate_sites(n_customers)
-    #facilities = generate_candidate_sites(n_facilities)
-    
-    #trans_costs = distance_matrix(customers,facilities)
-    
-    # transportation costs
-    trans_costs = np.sqrt(
-            (c_x.reshape((-1, 1)) - f_x.reshape((1, -1))) ** 2 \
-            + (c_y.reshape((-1, 1)) - f_y.reshape((1, -1))) ** 2)
-
-    
-    
-    #print(trans_costs)
-    
-    # write problem
-    with open(filename, 'w') as file:
-        file.write("minimize\n")
-        file.write(" obj: "+"".join([f" +{trans_costs[i, j]} x_{i+1}_{j+1}" for i in range(n_customers) for j in range(n_facilities)]))
-        
-        #file.write("".join([f" +{fixed_costs[j]} y_{j+1}" for j in range(n_facilities)]))
-
-        file.write("\nsubject to\n")
-        
-        # assignment constraints
-        cnt = 0 
-        for i in range(n_customers):
-            cnt = cnt+1
-            file.write(f" constraints{cnt}: " +"".join([f"+ 1 x_{i+1}_{j+1}" for j in range(n_facilities)]) + f" = 1\n")
-
-    
-        cnt = cnt+1
-        # facilty constraint
-        file.write(f" constraints{cnt}: ")
-        for j in range(n_facilities):
-            #if j<1:
-            #    file.write(f"y_{j+1}")
-            #else :
-            file.write(f" +1 y_{j+1}")
-        file.write(f" = {p}\n")
-                   
-        # opening constraints
-        for j in range(n_facilities):
-            for i in range(n_customers):
-                cnt = cnt+1
-                file.write(f" constraints{cnt}: " + f" -1 x_{i+1}_{j+1}" + f"+1 y_{j+1} >= 0\n")
-                #file.write(f" constraints{cnt}: " +"".join([f" -1 x_{i+1}_{j+1}" for i in range(n_customers)]) + f"+1 y_{j+1} >= 0\n")
-
-        # optional constraints for LP relaxation tightening
-
-        #file.write("Bounds\n")
-        #    for j in range(n_facilities):
-        #        file.write(f" 0 <= x_{i+1}_{j+1} <= 1\n")
-        
-        #file.write("".join([f" 0 <= y_{j+1} <=1 \n" for j in range(n_facilities)]))
-        
-        file.write("Bounds\n")
-        for i in range(n_customers):
-            for j in range(n_facilities):
-                file.write(f" 0 <= x_{i+1}_{j+1} <= 1\n")
-
-        file.write("".join([f" 0 <= y_{j+1} <=1 \n" for j in range(n_facilities)]))
-
-        file.write("\nbinary\n")
-        #for i in range(n_customers):
-        #    for j in range(n_facilities):
-        #        file.write(f" x_{i+1}_{j+1}\n")
-        
-        #file.write("Binaries\n")
-        
-        for i in range(n_customers):
-            for j in range(n_facilities):
-                file.write(f" x_{i+1}_{j+1}\n")
-        
-        file.write("".join([f" y_{j+1} \n" for j in range(n_facilities)]))
-        file.write("End")
-
-def generate_p_center(random, filename, n_customers, n_facilities, p):
-    """
-    Generate a p-center Problem following
-
-    Originally Published:
-        S. L. Hakimi. 1964. Optimum Locations of Switching Centers and
-        the Absolute Centers and Medians of a Graph. Operations Research.
-        12 (3):450-459.
-    Adapted from:
-        Daskin, M. (1995). Network and discrete location: Models, algorithms,
-        and applications. New York: John Wiley and Sons, Inc.
-
-    Saves it as a CPLEX LP file.
-
-    Parameters
-    ----------
-    random : numpy.random.RandomState
-        A random number generator.
-    filename : str
-        Path to the file to save.
-    n_customers: int
-        The desired number of customers.
-    n_facilities: int
-        The desired number of facilities.
-    p: int
-        The number of facilities.
-    """
-    #rng = np.random.RandomState(1)
-
-    c_x = rng.rand(n_customers)
-    c_y = rng.rand(n_customers)
-
-    f_x = rng.rand(n_facilities)
-    f_y = rng.rand(n_facilities)
-
-    #customers = generate_candidate_sites(n_customers)
-    #facilities = generate_candidate_sites(n_facilities)
-    #trans_costs = distance_matrix(customers,facilities)
-
-    # transportation costs
-    trans_costs = np.sqrt(
-            (c_x.reshape((-1, 1)) - f_x.reshape((1, -1))) ** 2 \
-            + (c_y.reshape((-1, 1)) - f_y.reshape((1, -1))) ** 2)
-
-    #print(trans_costs)
-
-    # write problem
-    with open(filename, 'w') as file:
-        file.write("minimize\n")
-
-        file.write(" obj: "+f"1 W_{1}")
-
-
-        file.write("\nsubject to\n")
-
-        # assignment constraints
-        cnt = 0
-        for i in range(n_customers):
-            cnt = cnt+1
-            file.write(f" constraints{cnt}: " +"".join([f"+ 1 x_{i+1}_{j+1}" for j in range(n_facilities)]) + f" = 1\n")
-
-
-        cnt = cnt+1
-        # facilty constraint
-        file.write(f" constraints{cnt}: ")
-        for j in range(n_facilities):
-            #if j<1:
-            #    file.write(f"y_{j+1}")
-            #else :
-            file.write(f" +1 y_{j+1}")
-        file.write(f" = {p}\n")
-
-        # opening constraints
-        for j in range(n_facilities):
-            for i in range(n_customers):
-                cnt = cnt+1
-                file.write(f" constraints{cnt}: " + f" -1 x_{i+1}_{j+1}" + f"+1 y_{j+1} >= 0\n")
-                #file.write(f" constraints{cnt}: " +"".join([f" -1 x_{i+1}_{j+1}" for i in range(n_customers)]) + f"+1 y_{j+1} >= 0\n")
-
-        # minimize maximum constraints
-        for j in range(n_facilities):
-            cnt = cnt+1
-            file.write(f" constraints{cnt}: "+"".join([f" +{trans_costs[i, j]} x_{i+1}_{j+1}" for i in range(n_customers)]) + f"-1 W_{1}<=0\n" )
-
-
-        file.write("bounds\n")
-        file.write(f"0 <= W_{1} \n")
-        for i in range(n_customers):
-            for j in range(n_facilities):
-                file.write(f" 0 <= x_{i+1}_{j+1} <= 1\n")
-
-        file.write("".join([f" 0 <= y_{j+1} <=1 \n" for j in range(n_facilities)]))
-        #for i in range(n_customers):
-        #    for j in range(n_facilities):
-        #        file.write(f" 0 <= x_{i+1}_{j+1} <= 1\n")
-
-        #file.write("".join([f" 0 <= y_{j+1} <=1 \n" for j in range(n_facilities)]))
-
-        file.write("binary\n")
-        #for i in range(n_customers):
-        #    for j in range(n_facilities):
-        #        file.write(f" x_{i+1}_{j+1}\n")
-
-        #file.write("Binaries\n")
-
-        for i in range(n_customers):
-            for j in range(n_facilities):
-                file.write(f" x_{i+1}_{j+1}\n")
-
-        file.write("".join([f" y_{j+1} \n" for j in range(n_facilities)]))
-        file.write("End")
-
 def generate_MinMax_MTSP(random, filename, n_customers,m_salesman):
     """
     Generate a generate_MinMax_MTSP problem following
@@ -849,7 +618,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['MTSP2', 'MTSP1', 'minmax-mtsp', 'p_median'],
+        choices=['MTSP', 'MTSP1', 'MTSP2', 'minmax-mtsp'],
     )
     parser.add_argument(
         '-s', '--seed',
@@ -861,44 +630,23 @@ if __name__ == '__main__':
 
     rng = np.random.RandomState(args.seed)
 
-    if args.problem == 'MTSP2':
-        # number_of_customers = 12
-        # number_of_salesman = 3
+    if args.problem == 'MTSP':
         filenames = []
         ncustomerss = []
         nsalesmans = []
 
-        # # train instances
-        # n = 2000
-        # lp_dir = f'data/instances/MTSP/train_{number_of_customers}_{number_of_salesman}'
-        # print(f"{n} instances in {lp_dir}")
-        # os.makedirs(lp_dir)
-        # filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])   #extend() 函数用于在列表末尾一次性追加另一个序列中的多个值
-        # ncustomerss.extend([number_of_customers] * n)
-        # nsalesmans.extend([number_of_salesman] * n)
-
-        # # validation instances
-        # n = 400
-        # lp_dir = f'data/instances/MTSP/valid_{number_of_customers}_{number_of_salesman}'
-        # print(f"{n} instances in {lp_dir}")
-        # os.makedirs(lp_dir)
-        # filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
-        # ncustomerss.extend([number_of_customers] * n)
-        # nsalesmans.extend([number_of_salesman] * n)
-
-
-        # small transfer instances
-        n = 10
-        number_of_customers = 9
+        # Generate instances of different scales to evaluate the problem
+        n = 20
         number_of_salesman = 3
+        #
+        number_of_customers = 9
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
         os.makedirs(lp_dir)
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
-        # medium transfer instances
+        #
         number_of_customers = 12
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
@@ -906,8 +654,7 @@ if __name__ == '__main__':
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
-        # big transfer instances   
+        #
         number_of_customers = 15
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
@@ -915,8 +662,7 @@ if __name__ == '__main__':
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
-        # test instances
+        #
         number_of_customers = 18
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
@@ -924,7 +670,7 @@ if __name__ == '__main__':
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
+        #
         number_of_customers = 30
         number_of_salesman = 5
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
@@ -933,7 +679,7 @@ if __name__ == '__main__':
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
+        #
         number_of_customers = 40
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
@@ -941,7 +687,7 @@ if __name__ == '__main__':
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
+        #
         number_of_customers = 50
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
@@ -951,33 +697,29 @@ if __name__ == '__main__':
         nsalesmans.extend([number_of_salesman] * n)
 
         # actually generate the instances
-        for filename, ncs, nsm in zip(filenames, ncustomerss, nsalesmans): #zip() 函数用于将可迭代的对象作为参数，
-                                                                                        #将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表
+        for filename, ncs, nsm in zip(filenames, ncustomerss, nsalesmans):
             print(f"  generating file {filename} ...")
-            generate_MTSP2(rng, filename, n_customers=ncs, m_salesman=nsm)
+            generate_MTSP(rng, filename, n_customers=ncs, m_salesman=nsm)
 
         print("done.")
 
     elif args.problem == 'MTSP1':
-        # number_of_customers = 12
-        # number_of_salesman = 3
         filenames = []
         ncustomerss = []
         nsalesmans = []
 
-
-        # small transfer instances
-        n = 10
-        number_of_customers = 9
+        # Generate instances of different scales to evaluate the problem
+        n = 20
         number_of_salesman = 3
+        #
+        number_of_customers = 9
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
         os.makedirs(lp_dir)
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
-        # medium transfer instances
+        #
         number_of_customers = 12
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
@@ -985,8 +727,7 @@ if __name__ == '__main__':
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
-        # big transfer instances   
+        #
         number_of_customers = 15
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
@@ -994,8 +735,7 @@ if __name__ == '__main__':
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
-        # test instances
+        #
         number_of_customers = 18
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
@@ -1003,7 +743,7 @@ if __name__ == '__main__':
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
+        #
         number_of_customers = 30
         number_of_salesman = 5
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
@@ -1012,7 +752,7 @@ if __name__ == '__main__':
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
+        #
         number_of_customers = 40
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
@@ -1020,7 +760,7 @@ if __name__ == '__main__':
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
+        #
         number_of_customers = 50
         lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
@@ -1037,6 +777,81 @@ if __name__ == '__main__':
 
         print("done.")
 
+    elif args.problem == 'MTSP2':
+        filenames = []
+        ncustomerss = []
+        nsalesmans = []
+
+        # Generate instances of different scales to evaluate the problem
+        n = 20
+        number_of_salesman = 3
+        #
+        number_of_customers = 9
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        #
+        number_of_customers = 12
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        #
+        number_of_customers = 15
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        #
+        number_of_customers = 18
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        #
+        number_of_customers = 30
+        number_of_salesman = 5
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        #
+        number_of_customers = 40
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        #
+        number_of_customers = 50
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+
+        # actually generate the instances
+        for filename, ncs, nsm in zip(filenames, ncustomerss, nsalesmans): #zip() 函数用于将可迭代的对象作为参数，
+                                                                                        #将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表
+            print(f"  generating file {filename} ...")
+            generate_MTSP2(rng, filename, n_customers=ncs, m_salesman=nsm)
+
+        print("done.")
+
+
     elif args.problem == 'minmax-mtsp':
         number_of_customers = 9
         number_of_salesman = 3
@@ -1044,32 +859,61 @@ if __name__ == '__main__':
         ncustomerss = []
         nsalesmans = []
 
-
-        # small transfer instances
-        n = 100
-        number_of_customers = 9
+        # Generate instances of different scales to evaluate the problem
+        n = 20
         number_of_salesman = 3
-        lp_dir = f'data/instances/minmax-mtsp/transfer_{number_of_customers}_{number_of_salesman}'
+        #
+        number_of_customers = 9
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
         os.makedirs(lp_dir)
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
-        # medium transfer instances
-        n = 100
+        #
         number_of_customers = 12
-        lp_dir = f'data/instances/minmax-mtsp/transfer_{number_of_customers}_{number_of_salesman}'
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
         os.makedirs(lp_dir)
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
         ncustomerss.extend([number_of_customers] * n)
         nsalesmans.extend([number_of_salesman] * n)
-
-        # big transfer instances
-        n = 100
+        #
         number_of_customers = 15
-        lp_dir = f'data/instances/minmax-mtsp/transfer_{number_of_customers}_{number_of_salesman}'
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        #
+        number_of_customers = 18
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        #
+        number_of_customers = 30
+        number_of_salesman = 5
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        #
+        number_of_customers = 40
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        #
+        number_of_customers = 50
+        lp_dir = f'data/instances/{args.problem}/test_{number_of_customers}_{number_of_salesman}'
         print(f"{n} instances in {lp_dir}")
         os.makedirs(lp_dir)
         filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
@@ -1083,55 +927,4 @@ if __name__ == '__main__':
             print(f"  generating file {filename} ...")
             generate_MinMax_MTSP(rng, filename, n_customers=ncs, m_salesman=nsm)
 
-        print("done.")
-
-    elif args.problem == 'p_median':
-        number_of_customers = 100
-        number_of_facilities = 100
-        p = 5
-        filenames = []
-        ncustomerss = []
-        nfacilitiess = []
-        ps = []
-
-        # small transfer instances
-        n = 20
-        number_of_customers = 100
-        number_of_facilities = 100
-        lp_dir = f'data/instances/p_median/transfer_{number_of_customers}_{number_of_facilities}_{p}'
-        print(f"{n} instances in {lp_dir}")
-        os.makedirs(lp_dir)
-        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
-        ncustomerss.extend([number_of_customers] * n)
-        nfacilitiess.extend([number_of_facilities] * n)
-        ps.extend([p] * n)
-
-        # medium transfer instances
-        n = 20
-        number_of_customers = 200
-        lp_dir = f'data/instances/p_median/transfer_{number_of_customers}_{number_of_facilities}_{p}'
-        print(f"{n} instances in {lp_dir}")
-        os.makedirs(lp_dir)
-        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
-        ncustomerss.extend([number_of_customers] * n)
-        nfacilitiess.extend([number_of_facilities] * n)
-        ps.extend([p] * n)
-
-        # big transfer instances
-        n = 100
-        number_of_customers = 400
-        lp_dir = f'data/instances/p_median/transfer_{number_of_customers}_{number_of_facilities}_{p}'
-        print(f"{n} instances in {lp_dir}")
-        os.makedirs(lp_dir)
-        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
-        ncustomerss.extend([number_of_customers] * n)
-        nfacilitiess.extend([number_of_facilities] * n)
-        ps.extend([p] * n)
-
-        # actually generate the instances 
-        for filename, ncs, nfs, p in zip(filenames, ncustomerss, nfacilitiess, ps):
-        
-            print(f"  generating file {filename} ...")
-            generate_p_median(rng, filename, n_customers=ncs, n_facilities=nfs, p=p)
-        
         print("done.")

@@ -297,7 +297,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['MTSP_ori', 'MTSP_9', 'MTSP_10w', 'MTSP_ori_10w', 'minmax-mtsp', 'minmax-mtsp_10w', 'facilities', 'p_center', 'p_center_10w'],
+        choices=['MTSP_ori', 'MTSP_ori_10w', 'minmax-mtsp', 'minmax-mtsp_10w'],
     )
     parser.add_argument(
         '-s', '--seed',
@@ -322,26 +322,11 @@ if __name__ == '__main__':
     node_record_prob = 0.05
     time_limit = 3600
 
-    if args.problem == 'MTSP_9':
-        instances_train = glob.glob('data/instances/MTSP_9/train_9_3/*.lp')
-        instances_valid = glob.glob('data/instances/MTSP_9/valid_9_3/*.lp')
-        instances_test = glob.glob('data/instances/MTSP_9/test_9_3/*.lp')
-        out_dir = 'data/samples/MTSP_9/9_3'
-
-    elif args.problem == 'MTSP_ori':
+    if args.problem == 'MTSP_ori':
         instances_train = glob.glob('data/instances/MTSP_ori/train_9_3/*.lp')
         instances_valid = glob.glob('data/instances/MTSP_ori/valid_9_3/*.lp')
         instances_test = glob.glob('data/instances/MTSP_ori/test_9_3/*.lp')
         out_dir = 'data/samples/MTSP_ori/9_3'
-
-    elif args.problem == 'MTSP_10w':
-        train_size = 100000
-        valid_size = 20000
-        test_size = 20000
-        instances_train = glob.glob('data/instances/MTSP_10w/train_9_3/*.lp')
-        instances_valid = glob.glob('data/instances/MTSP_10w/valid_9_3/*.lp')
-        instances_test = glob.glob('data/instances/MTSP_10w/test_9_3/*.lp')
-        out_dir = 'data/samples/MTSP_10w/9_3'
 
     elif args.problem == 'MTSP_ori_10w':
         train_size = 100000
@@ -366,40 +351,6 @@ if __name__ == '__main__':
         instances_valid = glob.glob('data/instances/minmax-mtsp/valid_9_3/*.lp')
         instances_test = glob.glob('data/instances/minmax-mtsp/test_9_3/*.lp')
         out_dir = 'data/samples/minmax-mtsp_10w/9_3'
-
-    elif args.problem == 'MTSP_15':
-        instances_train = glob.glob('data/instances/MTSP_15/train_15_3/*.lp')
-        instances_valid = glob.glob('data/instances/MTSP_15/valid_15_3/*.lp')
-        instances_test = glob.glob('data/instances/MTSP_15/test_15_3/*.lp')
-        out_dir = 'data/samples/MTSP_15/15_3'
-
-    # elif args.problem == 'MTSP_30':
-    #     instances_train = glob.glob('data/instances/MTSP_30/train_30_5/*.lp')
-    #     instances_valid = glob.glob('data/instances/MTSP_30/valid_30_5/*.lp')
-    #     instances_test = glob.glob('data/instances/MTSP_30/test_30_5/*.lp')
-    #     out_dir = 'data/samples/MTSP_30/30_5'
-
-    elif args.problem == 'facilities':
-        instances_train = glob.glob('data/instances/facilities/train_100_100_5/*.lp')
-        instances_valid = glob.glob('data/instances/facilities/valid_100_100_5/*.lp')
-        instances_test = glob.glob('data/instances/facilities/test_100_100_5/*.lp')
-        out_dir = 'data/samples/facilities/100_100_5'
-        time_limit = 600
-    
-    elif args.problem == 'p_center':
-        instances_train = glob.glob('data/instances/p_center/train_100_10_5/*.lp')
-        instances_valid = glob.glob('data/instances/p_center/valid_100_10_5/*.lp')
-        instances_test = glob.glob('data/instances/p_center/test_100_10_5/*.lp')
-        out_dir = 'data/samples/p_center/100_10_5'
-
-    elif args.problem == 'p_center_10w':
-        train_size = 100000
-        valid_size = 20000
-        test_size = 20000
-        instances_train = glob.glob('data/instances/p_center/train_100_10_5/*.lp')
-        instances_valid = glob.glob('data/instances/p_center/valid_100_10_5/*.lp')
-        instances_test = glob.glob('data/instances/p_center/test_100_10_5/*.lp')
-        out_dir = 'data/samples/p_center_10w/100_10_5'
 
     else:
         raise NotImplementedError

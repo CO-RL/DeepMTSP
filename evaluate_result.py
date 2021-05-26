@@ -129,7 +129,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['MTSP2', 'MTSP_9', 'facilities', 'MTSP_ori_10w', 'minmax-mtsp_10w'],
+        choices=['MTSP', 'MTSP1', 'MTSP2', 'minmax-mtsp'],
     )
     parser.add_argument(
         '-g', '--gpu',
@@ -141,41 +141,44 @@ if __name__ == '__main__':
 
     result_file = f"{args.problem}_{time.strftime('%Y%m%d-%H%M%S')}.csv"
     instances = []
-    # seeds = [0, 1, 2, 3, 4]
-    seeds = [3]
-    gcnn_models = ['baseline', 'attention']
-    # gcnn_models = []
-    other_models = ['extratrees_khalil', 'lambdamart_khalil', 'svmrank_khalil']
-    # other_models = ['lambdamart_khalil', 'svmrank_khalil']
-    # other_models = []
+    seeds = [0, 1, 2, 3, 4]
+    # gcnn_models = ['baseline', 'attention']
+    # other_models = ['extratrees_khalil', 'lambdamart_khalil', 'svmrank_khalil']
     internal_branchers = ['relpscost']
     time_limit = 3600
 
-    if args.problem == 'MTSP2':
-        instances += [{'type': '1', 'path': f"data/instances/{args.problem}/test_9_3/instance_{i+1}.lp"} for i in range(10)]
-        instances += [{'type': '2', 'path': f"data/instances/{args.problem}/test_12_3/instance_{i+1}.lp"} for i in range(10)]
-        instances += [{'type': '3', 'path': f"data/instances/{args.problem}/test_15_3/instance_{i+1}.lp"} for i in range(10)]
-        instances += [{'type': '4', 'path': f"data/instances/{args.problem}/test_18_3/instance_{i+1}.lp"} for i in range(10)]
-        instances += [{'type': '5', 'path': f"data/instances/{args.problem}/test_30_5/instance_{i+1}.lp"} for i in range(10)]
-        instances += [{'type': '6', 'path': f"data/instances/{args.problem}/test_40_5/instance_{i+1}.lp"} for i in range(10)]
-        instances += [{'type': '7', 'path': f"data/instances/{args.problem}/test_50_5/instance_{i+1}.lp"} for i in range(10)]
-    
-    elif args.problem == 'MTSP_9':
-        instances += [{'type': 'small', 'path': f"data/instances/{args.problem}/transfer_9_3/instance_{i+1}.lp"} for i in range(20)]
-        instances += [{'type': 'medium', 'path': f"data/instances/{args.problem}/transfer_12_3/instance_{i+1}.lp"} for i in range(20)]
-        instances += [{'type': 'big', 'path': f"data/instances/{args.problem}/transfer_15_3/instance_{i+1}.lp"} for i in range(20)]
-
-    elif args.problem == 'facilities':
-        instances += [{'type': 'small', 'path': f"data/instances/{args.problem}/transfer_100_100_5/instance_{i+1}.lp"} for i in range(20)]
-        instances += [{'type': 'medium', 'path': f"data/instances/{args.problem}/transfer_200_100_5/instance_{i+1}.lp"} for i in range(20)]
-        instances += [{'type': 'large', 'path': f"data/instances/{args.problem}/transfer_400_100_5/instance_{i+1}.lp"} for i in range(20)]
-    
-    elif args.problem == 'MTSP_ori_10w':
-        instances += [{'type': '12cities', 'path': f"data/display_instance/MTSP/display_12_3/instance_{i+1}.lp"} for i in range(100)]
-
-    elif args.problem == 'minmax-mtsp_10w':
-        instances += [{'type': '9cities', 'path': f"data/display_instance/minmax-mtsp_9/display_9_3/instance_{i+1}.lp"} for i in range(100)]
-
+    if args.problem == 'MTSP':
+        instances += [{'type': '9cities', 'path': f"data/instances/{args.problem}/test_9_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '12cities', 'path': f"data/instances/{args.problem}/test_12_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '15cities', 'path': f"data/instances/{args.problem}/test_15_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '18cities', 'path': f"data/instances/{args.problem}/test_18_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '30cities', 'path': f"data/instances/{args.problem}/test_30_5/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '40cities', 'path': f"data/instances/{args.problem}/test_40_5/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '50cities', 'path': f"data/instances/{args.problem}/test_50_5/instance_{i+1}.lp"} for i in range(20)]
+    elif args.problem == 'MTSP1':
+        instances += [{'type': '9cities', 'path': f"data/instances/{args.problem}/test_9_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '12cities', 'path': f"data/instances/{args.problem}/test_12_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '15cities', 'path': f"data/instances/{args.problem}/test_15_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '18cities', 'path': f"data/instances/{args.problem}/test_18_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '30cities', 'path': f"data/instances/{args.problem}/test_30_5/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '40cities', 'path': f"data/instances/{args.problem}/test_40_5/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '50cities', 'path': f"data/instances/{args.problem}/test_50_5/instance_{i+1}.lp"} for i in range(20)]
+    elif args.problem == 'MTSP2':
+        instances += [{'type': '9cities', 'path': f"data/instances/{args.problem}/test_9_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '12cities', 'path': f"data/instances/{args.problem}/test_12_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '15cities', 'path': f"data/instances/{args.problem}/test_15_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '18cities', 'path': f"data/instances/{args.problem}/test_18_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '30cities', 'path': f"data/instances/{args.problem}/test_30_5/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '40cities', 'path': f"data/instances/{args.problem}/test_40_5/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '50cities', 'path': f"data/instances/{args.problem}/test_50_5/instance_{i+1}.lp"} for i in range(20)]
+    elif args.problem == 'minmax-mtsp':
+        instances += [{'type': '9cities', 'path': f"data/instances/{args.problem}/test_9_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '12cities', 'path': f"data/instances/{args.problem}/test_12_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '15cities', 'path': f"data/instances/{args.problem}/test_15_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '18cities', 'path': f"data/instances/{args.problem}/test_18_3/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '30cities', 'path': f"data/instances/{args.problem}/test_30_5/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '40cities', 'path': f"data/instances/{args.problem}/test_40_5/instance_{i+1}.lp"} for i in range(20)]
+        instances += [{'type': '50cities', 'path': f"data/instances/{args.problem}/test_50_5/instance_{i+1}.lp"} for i in range(20)]
     else:
         raise NotImplementedError
 
