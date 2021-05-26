@@ -1,10 +1,6 @@
-__Update__: check out library [Ecole](https://doc.ecole.ai), which reimplements everything you'll need for learning to branch, in a nice and clean Python package ([paper here](https://arxiv.org/abs/2011.06069)).
+# Graph Convolutional Neural Network with Attention Model to Solve Multiple Traveling Salesman Problems
 
-# Exact Combinatorial Optimization with Graph Convolutional Neural Networks
-
-Maxime Gasse, Didier Chételat, Nicola Ferroni, Laurent Charlin, Andrea Lodi
-
-This is the official implementation of our NeurIPS 2019 [paper](https://arxiv.org/abs/1906.01629).
+Haojian Liang, Shaohua Wang, Huilai Li
 
 ## Installation
 
@@ -12,99 +8,78 @@ See installation instructions [here](INSTALL.md).
 
 ## Running the experiments
 
-### Set Covering
+### MTSP_2w
 ```
 # Generate MILP instances
-python 01_generate_instances.py setcover
+python 01_generate_instances.py MTSP_ori
 # Generate supervised learning datasets
-python 02_generate_samples.py setcover -j 4  # number of available CPUs
+python 02_generate_datasets.py MTSP_ori -j 4  # number of available CPUs
 # Training
 for i in {0..4}
 do
-    python 03_train_gcnn.py setcover -m baseline -s $i
-    python 03_train_gcnn.py setcover -m mean_convolution -s $i
-    python 03_train_gcnn.py setcover -m no_prenorm -s $i
-    python 03_train_competitor.py setcover -m extratrees -s $i
-    python 03_train_competitor.py setcover -m svmrank -s $i
-    python 03_train_competitor.py setcover -m lambdamart -s $i
+    python 03_train_gcnn.py MTSP_ori -m baseline -s $i
+    python 03_train_gcnn.py MTSP_ori -m attention -s $i
+    python 03_train_competitor.py MTSP_ori -m extratrees -s $i
+    python 03_train_competitor.py MTSP_ori -m svmrank -s $i
+    python 03_train_competitor.py MTSP_ori -m lambdamart -s $i
 done
 # Test
-python 04_test.py setcover
-# Evaluation
-python 05_evaluate.py setcover
+python 04_test.py MTSP_ori
 ```
 
-### Combinatorial Auction
+### MTSP_10w
 ```
-# Generate MILP instances
-python 01_generate_instances.py cauctions
 # Generate supervised learning datasets
-python 02_generate_samples.py cauctions -j 4  # number of available CPUs
+python 02_generate_datasets.py MTSP_ori_10w -j 4  # number of available CPUs
 # Training
 for i in {0..4}
 do
-    python 03_train_gcnn.py cauctions -m baseline -s $i
-    python 03_train_competitor.py cauctions -m extratrees -s $i
-    python 03_train_competitor.py cauctions -m svmrank -s $i
-    python 03_train_competitor.py cauctions -m lambdamart -s $i
+    python 03_train_gcnn.py MTSP_ori -m baseline -s $i
+    python 03_train_gcnn.py MTSP_ori -m attention -s $i
+    python 03_train_competitor.py MTSP_ori -m extratrees -s $i
+    python 03_train_competitor.py MTSP_ori -m svmrank -s $i
+    python 03_train_competitor.py MTSP_ori -m lambdamart -s $i
 done
 # Test
-python 04_test.py cauctions
-# Evaluation
-python 05_evaluate.py cauctions
+python 04_test.py MTSP_ori
+```
+### minmax-mtsp_2w
+```
+# Generate MILP instances
+python 01_generate_instances.py minmax-mtsp
+# Generate supervised learning datasets
+python 02_generate_datasets.py minmax-mtsp -j 4  # number of available CPUs
+# Training
+for i in {0..4}
+do
+    python 03_train_gcnn.py minmax-mtsp -m baseline -s $i
+    python 03_train_gcnn.py minmax-mtsp -m attention -s $i
+    python 03_train_competitor.py minmax-mtsp -m extratrees -s $i
+    python 03_train_competitor.py minmax-mtsp -m svmrank -s $i
+    python 03_train_competitor.py minmax-mtsp -m lambdamart -s $i
+done
+# Test
+python 04_test.py MTSP_ori
 ```
 
-### Capacitated Facility Location
+### minmax-mtsp_10w
 ```
-# Generate MILP instances
-python 01_generate_instances.py facilities
 # Generate supervised learning datasets
-python 02_generate_samples.py facilities -j 4  # number of available CPUs
+python 02_generate_datasets.py minmax-mtsp_10w -j 4  # number of available CPUs
 # Training
 for i in {0..4}
 do
-    python 03_train_gcnn.py facilities -m baseline -s $i
-    python 03_train_competitor.py facilities -m extratrees -s $i
-    python 03_train_competitor.py facilities -m svmrank -s $i
-    python 03_train_competitor.py facilities -m lambdamart -s $i
+    python 03_train_gcnn.py minmax-mtsp_10w -m baseline -s $i
+    python 03_train_gcnn.py minmax-mtsp_10w -m attention -s $i
+    python 03_train_competitor.py minmax-mtsp_10w -m extratrees -s $i
+    python 03_train_competitor.py minmax-mtsp_10w -m svmrank -s $i
+    python 03_train_competitor.py minmax-mtsp_10w -m lambdamart -s $i
 done
 # Test
-python 04_test.py facilities
-# Evaluation
-python 05_evaluate.py facilities
-```
-
-### Maximum Independent Set
-```
-# Generate MILP instances
-python 01_generate_instances.py indset
-# Generate supervised learning datasets
-python 02_generate_samples.py indset -j 4  # number of available CPUs
-# Training
-for i in {0..4}
-do
-    python 03_train_gcnn.py indset -m baseline -s $i
-    python 03_train_competitor.py indset -m extratrees -s $i
-    python 03_train_competitor.py indset -m svmrank -s $i
-    python 03_train_competitor.py indset -m lambdamart -s $i
-done
-# Test
-python 04_test.py indset
-# Evaluation
-python 05_evaluate.py indset
+python 04_test.py MTSP_ori
 ```
 
 ## Citation
 Please cite our paper if you use this code in your work.
-```
-@inproceedings{conf/nips/GasseCFCL19,
-  title={Exact Combinatorial Optimization with Graph Convolutional Neural Networks},
-  author={Gasse, Maxime and Chételat, Didier and Ferroni, Nicola and Charlin, Laurent and Lodi, Andrea},
-  booktitle={Advances in Neural Information Processing Systems 32},
-  year={2019}
-}
-```
 
-## Questions / Bugs
-Please feel free to submit a Github issue if you have any questions or find any bugs. We do not guarantee any support, but will do our best if we can help.
 
