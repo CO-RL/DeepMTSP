@@ -1,0 +1,73 @@
+[2021-03-26 15:53:21.344608] Logfile for lambdamart model on MTSP_ori with seed 1
+[2021-03-26 15:53:21.440414] 20000 training files
+[2021-03-26 15:53:21.440545] 4000 validation files
+[2021-03-26 15:53:21.440573] Loading training samples
+[2021-03-26 15:53:21.535233]   100/20000 files processed (4080 candidate variables)
+[2021-03-26 15:53:21.583729]   200/20000 files processed (8164 candidate variables)
+[2021-03-26 15:53:21.632929]   300/20000 files processed (12427 candidate variables)
+[2021-03-26 15:53:21.681087]   400/20000 files processed (16298 candidate variables)
+[2021-03-26 15:53:21.730189]   500/20000 files processed (20377 candidate variables)
+[2021-03-26 15:53:21.778668]   600/20000 files processed (24485 candidate variables)
+[2021-03-26 15:53:21.827925]   700/20000 files processed (28660 candidate variables)
+[2021-03-26 15:53:21.875742]   800/20000 files processed (32533 candidate variables)
+[2021-03-26 15:53:21.924067]   900/20000 files processed (36386 candidate variables)
+[2021-03-26 15:53:21.972958]   1000/20000 files processed (40394 candidate variables)
+[2021-03-26 15:53:22.022500]   1100/20000 files processed (44557 candidate variables)
+[2021-03-26 15:53:22.070425]   1200/20000 files processed (48368 candidate variables)
+[2021-03-26 15:53:22.118999]   1300/20000 files processed (52399 candidate variables)
+[2021-03-26 15:53:22.168190]   1400/20000 files processed (56487 candidate variables)
+[2021-03-26 15:53:22.217508]   1500/20000 files processed (60612 candidate variables)
+[2021-03-26 15:53:22.267183]   1600/20000 files processed (64906 candidate variables)
+[2021-03-26 15:53:22.313271]   1700/20000 files processed (68875 candidate variables)
+[2021-03-26 15:53:22.360116]   1800/20000 files processed (72991 candidate variables)
+[2021-03-26 15:53:22.408601]   1900/20000 files processed (77078 candidate variables)
+[2021-03-26 15:53:22.459174]   2000/20000 files processed (81453 candidate variables)
+[2021-03-26 15:53:22.508790]   2100/20000 files processed (85417 candidate variables)
+[2021-03-26 15:53:22.557675]   2200/20000 files processed (89309 candidate variables)
+[2021-03-26 15:53:22.606803]   2300/20000 files processed (93382 candidate variables)
+[2021-03-26 15:53:22.655883]   2400/20000 files processed (97548 candidate variables)
+[2021-03-26 15:53:22.705474]   2500/20000 files processed (101718 candidate variables)
+[2021-03-26 15:53:22.754411]   2600/20000 files processed (105801 candidate variables)
+[2021-03-26 15:53:22.804105]   2700/20000 files processed (110015 candidate variables)
+[2021-03-26 15:53:22.852659]   2800/20000 files processed (113995 candidate variables)
+[2021-03-26 15:53:22.902133]   2900/20000 files processed (118190 candidate variables)
+[2021-03-26 15:53:22.951376]   3000/20000 files processed (122262 candidate variables)
+[2021-03-26 15:53:23.000832]   3100/20000 files processed (126419 candidate variables)
+[2021-03-26 15:53:23.050196]   3200/20000 files processed (130556 candidate variables)
+[2021-03-26 15:53:23.099009]   3300/20000 files processed (134679 candidate variables)
+[2021-03-26 15:53:23.149576]   3400/20000 files processed (138766 candidate variables)
+[2021-03-26 15:53:23.198304]   3500/20000 files processed (142735 candidate variables)
+[2021-03-26 15:53:23.247942]   3600/20000 files processed (147092 candidate variables)
+[2021-03-26 15:53:23.296626]   3700/20000 files processed (151137 candidate variables)
+[2021-03-26 15:53:23.343606]   3800/20000 files processed (155359 candidate variables)
+[2021-03-26 15:53:23.390822]   3900/20000 files processed (159568 candidate variables)
+[2021-03-26 15:53:23.438178]   4000/20000 files processed (163790 candidate variables)
+[2021-03-26 15:53:23.485907]   4100/20000 files processed (167681 candidate variables)
+[2021-03-26 15:53:23.535822]   4200/20000 files processed (171725 candidate variables)
+[2021-03-26 15:53:23.587351]   4300/20000 files processed (175975 candidate variables)
+[2021-03-26 15:53:23.637367]   4400/20000 files processed (179829 candidate variables)
+[2021-03-26 15:53:23.689709]   4500/20000 files processed (184097 candidate variables)
+[2021-03-26 15:53:23.740686]   4600/20000 files processed (188228 candidate variables)
+[2021-03-26 15:53:23.791548]   4700/20000 files processed (192339 candidate variables)
+[2021-03-26 15:53:23.842570]   4800/20000 files processed (196489 candidate variables)
+[2021-03-26 15:53:23.893223]   4900/20000 files processed (200560 candidate variables)
+[2021-03-26 15:53:23.944103]   5000/20000 files processed (204807 candidate variables)
+[2021-03-26 15:53:23.994142]   5100/20000 files processed (208814 candidate variables)
+[2021-03-26 15:53:24.045010]   5200/20000 files processed (212937 candidate variables)
+[2021-03-26 15:53:24.094925]   5300/20000 files processed (216926 candidate variables)
+[2021-03-26 15:53:24.144954]   5400/20000 files processed (220985 candidate variables)
+[2021-03-26 15:53:24.195401]   5500/20000 files processed (225155 candidate variables)
+Traceback (most recent call last):
+  File "03_train_competitor.py", line 120, in <module>
+    train_max_size, logfile)
+  File "03_train_competitor.py", line 16, in load_samples
+    cand_x, cand_y, best = load_flat_samples(filename, feat_type, label_type, augment, qbnorm)
+  File "/home/lianghaojian/learn2branch/utilities.py", line 351, in load_flat_samples
+    sample = pickle.load(file)
+  File "/home/lianghaojian/miniconda3/envs/l2b/lib/python3.6/gzip.py", line 271, in read
+    def read(self, size=-1):
+KeyboardInterrupt
+usage: 03_train_gcnn.py [-h] [-m {baseline,simple,attention}] [-s SEED]
+                        [-g GPU]
+                        {MTSP_ori,MTSP_9,MTSP_10w,MTSP_ori_10w,minmax-mtsp,minmax-mtsp_10w,facilities,p_center}
+03_train_gcnn.py: error: unrecognized arguments: ./log/log_error
