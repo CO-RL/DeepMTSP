@@ -297,7 +297,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['MTSP_ori', 'MTSP_ori_10w', 'minmax-mtsp', 'minmax-mtsp_10w'],
+        choices=['Standard_MTSP', 'Standard_MTSP_10w', 'MinMax_MTSP', 'MinMax_MTSP_10w', 'Bounded_MTSP', 'Bounded_MTSP_10w'],
     )
     parser.add_argument(
         '-s', '--seed',
@@ -322,36 +322,53 @@ if __name__ == '__main__':
     node_record_prob = 0.05
     time_limit = 3600
 
-    if args.problem == 'MTSP_ori':
-        instances_train = glob.glob('data/instances/MTSP_ori/train_9_3/*.lp')
-        instances_valid = glob.glob('data/instances/MTSP_ori/valid_9_3/*.lp')
-        instances_test = glob.glob('data/instances/MTSP_ori/test_9_3/*.lp')
-        out_dir = 'data/samples/MTSP_ori/9_3'
+    if args.problem == 'Standard_MTSP':
+        instances_train = glob.glob('data/instances/Standard_MTSP/train_9_3/*.lp')
+        instances_valid = glob.glob('data/instances/Standard_MTSP/valid_9_3/*.lp')
+        instances_test = glob.glob('data/instances/Standard_MTSP/test_9_3/*.lp')
+        out_dir = 'data/samples/Standard_MTSP/9_3'
 
-    elif args.problem == 'MTSP_ori_10w':
+    elif args.problem == 'Standard_MTSP_10w':
         train_size = 100000
         valid_size = 20000
         test_size = 20000
-        instances_train = glob.glob('data/instances/MTSP_ori_10w/train_9_3/*.lp')
-        instances_valid = glob.glob('data/instances/MTSP_ori_10w/valid_9_3/*.lp')
-        instances_test = glob.glob('data/instances/MTSP_ori_10w/test_9_3/*.lp')
-        out_dir = 'data/samples/MTSP_ori_10w/9_3'
+        instances_train = glob.glob('data/instances/Standard_MTSP/train_9_3/*.lp')
+        instances_valid = glob.glob('data/instances/Standard_MTSP/valid_9_3/*.lp')
+        instances_test = glob.glob('data/instances/Standard_MTSP/test_9_3/*.lp')
+        out_dir = 'data/samples/Standard_MTSP_10w/9_3'
 
-    elif args.problem == 'minmax-mtsp':
-        instances_train = glob.glob('data/instances/minmax-mtsp/train_9_3/*.lp')
-        instances_valid = glob.glob('data/instances/minmax-mtsp/valid_9_3/*.lp')
-        instances_test = glob.glob('data/instances/minmax-mtsp/test_9_3/*.lp')
-        out_dir = 'data/samples/minmax-mtsp/9_3'
+    elif args.problem == 'MinMax_MTSP':
+        instances_train = glob.glob('data/instances/MinMax_MTSP/train_9_3/*.lp')
+        instances_valid = glob.glob('data/instances/MinMax_MTSP/valid_9_3/*.lp')
+        instances_test = glob.glob('data/instances/MinMax_MTSP/test_9_3/*.lp')
+        out_dir = 'data/samples/MinMax_MTSP/9_3'
 
-    elif args.problem == 'minmax-mtsp_10w':
+    elif args.problem == 'MinMax_MTSP_10w':
         train_size = 100000
         valid_size = 20000
         test_size = 20000
-        instances_train = glob.glob('data/instances/minmax-mtsp/train_9_3/*.lp')
-        instances_valid = glob.glob('data/instances/minmax-mtsp/valid_9_3/*.lp')
-        instances_test = glob.glob('data/instances/minmax-mtsp/test_9_3/*.lp')
-        out_dir = 'data/samples/minmax-mtsp_10w/9_3'
+        instances_train = glob.glob('data/instances/MinMax_MTSP/train_9_3/*.lp')
+        instances_valid = glob.glob('data/instances/MinMax_MTSP/valid_9_3/*.lp')
+        instances_test = glob.glob('data/instances/MinMax_MTSP/test_9_3/*.lp')
+        out_dir = 'data/samples/MinMax_MTSP_10w/9_3'
 
+    elif args.problem == 'Bounded_MTSP':
+        train_size = 100000
+        valid_size = 20000
+        test_size = 20000
+        instances_train = glob.glob('data/instances/Bounded_MTSP/train_12_3/*.lp')
+        instances_valid = glob.glob('data/instances/Bounded_MTSP/valid_12_3/*.lp')
+        instances_test = glob.glob('data/instances/Bounded_MTSP/test_12_3/*.lp')
+        out_dir = 'data/samples/Bounded_MTSP/12_3'
+
+    elif args.problem == 'Bounded_MTSP_10w':
+        train_size = 100000
+        valid_size = 20000
+        test_size = 20000
+        instances_train = glob.glob('data/instances/Bounded_MTSP/train_12_3/*.lp')
+        instances_valid = glob.glob('data/instances/Bounded_MTSP/valid_12_3/*.lp')
+        instances_test = glob.glob('data/instances/Bounded_MTSP/test_12_3/*.lp')
+        out_dir = 'data/samples/Bounded_MTSP_10w/12_3'
     else:
         raise NotImplementedError
 
@@ -360,7 +377,7 @@ if __name__ == '__main__':
     print(f"{len(instances_test)} test instances for {test_size} samples")
 
     # create output directory, throws an error if it already exists
-    os.makedirs(out_dir)
+    # os.makedirs(out_dir)
 
     rng = np.random.RandomState(args.seed)
     collect_samples(instances_train, out_dir + '/train', rng, train_size,

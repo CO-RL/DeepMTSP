@@ -133,7 +133,7 @@ class Graph:
         graph = Graph(number_of_nodes, edges, degrees, neighbors)
         return graph
 
-def generate_MTSP_ori(random, filename, n_customers,m_salesman):
+def generate_Standard_MTSP(random, filename, n_customers,m_salesman):
     """
     Generate a MTSP problem following
     
@@ -245,7 +245,98 @@ def generate_MTSP_ori(random, filename, n_customers,m_salesman):
             
         #file.write("".join([f" y_{j+1}" for j in range(n_facilities)]))
         file.write("\nEnd")
+def generate_Bounded_MTSP(random, filename, n_customers, m_salesman, L, K):
+    """
+    Generate a generate_bounded_MTSP problem following
+    Saves it as a CPLEX LP file.
+        Parameters
+    ----------
+    random : numpy.random.RandomState
+        A random number generator.
+    filename : str
+        Path to the file to save.
+    n_customers: int
+        The desired number of customers
+    """
+    c_x = rng.rand(n_customers)
+    c_y = rng.rand(n_customers)
 
+    f_x = c_x
+    f_y = c_y
+    K = K
+    L = L
+    # transportation costs
+    trans_costs = np.sqrt(
+            (c_x.reshape((-1, 1)) - f_x.reshape((1, -1))) ** 2 \
+            + (c_y.reshape((-1, 1)) - f_y.reshape((1, -1))) ** 2)
+
+    # write problem
+    with open(filename, 'w') as file:
+        file.write("Minimize\n obj:")
+
+        file.write("".join(
+            [f" + {trans_costs[i, j]} x_{i + 1}_{j + 1}" for i in range(n_customers) for j in range(n_customers)]))
+
+        file.write("\nSubject To\n")
+
+        cnt = 0
+        cnt = cnt + 1
+        file.write(f" c{cnt}:" + "".join([f" + 1 x_{1}_{j + 1}" for j in range(1, n_customers)]) + f" = {m_salesman}\n")
+
+        cnt = cnt + 1
+        file.write(f" c{cnt}:" + "".join([f" + 1 x_{j + 1}_{1}" for j in range(1, n_customers)]) + f" = {m_salesman}\n")
+
+        for i in range(1, n_customers):
+            cnt = cnt + 1
+            file.write(f" c{cnt}:" + "".join([f" + 1 x_{i + 1}_{j + 1}" for j in range(n_customers)]) + f" = 1\n")
+
+        for j in range(1, n_customers):
+            cnt = cnt + 1
+            file.write(f" c{cnt}:" + "".join([f" + 1 x_{i + 1}_{j + 1}" for i in range(n_customers)]) + f" = 1\n")
+
+        for i in range(1, n_customers):
+            cnt = cnt + 1
+            file.write(f" c{cnt}: 1 u_{i + 1} + {L - 2} x_{1}_{i+1} - 1 x_{i+1}_{1} <= {L - 1}\n")
+        for i in range(1, n_customers):
+            cnt = cnt + 1
+            file.write(f" c{cnt}: - 1 u_{i + 1} - 1 x_{1}_{i+1} - {2 - K} x_{i+1}_{1} + 2 <= 0\n")
+
+        for i in range(1,n_customers):
+            cnt = cnt+1
+            file.write(f" c{cnt}: 1 x_{1}_{i+1} + 1 x_{i+1}_{1} <= 1\n")
+
+        for i in range(1,n_customers):
+            for j in range(1,n_customers):
+                if i == j:
+                    continue
+                else:
+                    cnt = cnt+1
+                    file.write(f" c{cnt}: {L} x_{i+1}_{j+1} + {L-2} x_{j+1}_{i+1} + 1 u_{i+1} - 1 u_{j+1} <= {L-1} \n")
+
+        for i in range(0,n_customers):
+            for j in range(0,n_customers):
+                cnt = cnt+1
+                if i == j:
+                    file.write(f" c{cnt}: x_{i+1}_{j+1} = 0\n")
+
+        cnt = cnt + 1
+        file.write(f" c{cnt}: u_{1} = 0\n")
+
+        file.write("\nBounds\n")
+        for i in range(1, n_customers):
+            cnt = cnt + 1
+            file.write(f" c{cnt}: 1 <= u_{i + 1} <= {n_customers - 1}\n")
+
+        file.write("\nGenerals\n")
+        #
+        for i in range(1, n_customers):
+            file.write(f" u_{i + 1} ")
+
+        file.write("\nbinary\n")
+
+        for i in range(n_customers):
+            for j in range(n_customers):
+                file.write(f" x_{i + 1}_{j + 1} ")
 def generate_MinMax_MTSP(random, filename, n_customers,m_salesman):
     """
     Generate a generate_MinMax_MTSP problem following
@@ -370,7 +461,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['MTSP_ori', 'minmax-mtsp'],
+        choices=['Standard_MTSP', 'MinMax_MTSP', 'Bounded_MTSP'],
     )
     parser.add_argument(
         '-s', '--seed',
@@ -382,7 +473,7 @@ if __name__ == '__main__':
 
     rng = np.random.RandomState(args.seed)
 
-    if args.problem == 'MTSP_ori':
+    if args.problem == 'Standard_MTSP':
         number_of_customers = 9
         number_of_salesman = 3
         filenames = []
@@ -420,11 +511,11 @@ if __name__ == '__main__':
         for filename, ncs, nsm in zip(filenames, ncustomerss, nsalesmans): #zip() 函数用于将可迭代的对象作为参数，
                                                                                         #将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表
             print(f"  generating file {filename} ...")
-            generate_MTSP_ori(rng, filename, n_customers=ncs, m_salesman=nsm)
+            generate_Standard_MTSP(rng, filename, n_customers=ncs, m_salesman=nsm)
 
         print("done.")
 
-    elif args.problem == 'minmax-mtsp':
+    elif args.problem == 'MinMax_MTSP':
         number_of_customers = 9
         number_of_salesman = 3
         filenames = []
@@ -465,5 +556,58 @@ if __name__ == '__main__':
                                                                                         #将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表
             print(f"  generating file {filename} ...")
             generate_MinMax_MTSP(rng, filename, n_customers=ncs, m_salesman=nsm)
+
+        print("done.")
+
+    elif args.problem == 'Bounded_MTSP':
+        number_of_customers = 12
+        number_of_salesman = 3
+        max_num = 6
+        min_num = 2
+        filenames = []
+        ncustomerss = []
+        nsalesmans = []
+        n_L = []
+        n_K = []
+        # train instances
+        n = 10000
+        lp_dir = f'data/instances/Bounded_MTSP/train_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])   #extend() 函数用于在列表末尾一次性追加另一个序列中的多个值
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        n_L.extend([max_num] * n)
+        n_K.extend([min_num] * n)
+
+        # validation instances
+        n = 2000
+        lp_dir = f'data/instances/Bounded_MTSP/valid_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        n_L.extend([max_num] * n)
+        n_K.extend([min_num] * n)
+
+        # test instances
+        n = 2000
+        number_of_customers = 12
+        number_of_salesman = 3
+        lp_dir = f'data/instances/Bounded_MTSP/test_{number_of_customers}_{number_of_salesman}'
+        print(f"{n} instances in {lp_dir}")
+        os.makedirs(lp_dir)
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        ncustomerss.extend([number_of_customers] * n)
+        nsalesmans.extend([number_of_salesman] * n)
+        n_L.extend([max_num] * n)
+        n_K.extend([min_num] * n)
+
+        # actually generate the instances
+        for filename, ncs, nsm, L, K in zip(filenames, ncustomerss, nsalesmans, n_L, n_K): #zip() 函数用于将可迭代的对象作为参数，
+                                                                                        #将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表
+            print(f"  generating file {filename} ...")
+            generate_Bounded_MTSP(rng, filename, n_customers=ncs, m_salesman=nsm, L=L, K=K)
 
         print("done.")

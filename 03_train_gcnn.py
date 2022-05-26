@@ -111,7 +111,8 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['MTSP_ori', 'MTSP_ori_10w', 'minmax-mtsp', 'minmax-mtsp_10w'],
+        choices=['Standard_MTSP', 'Standard_MTSP_10w', 'MinMax_MTSP',
+                 'MinMax_MTSP_10w', 'Bounded_MTSP', 'Bounded_MTSP_10w'],
     )
     parser.add_argument(
         '-m', '--model',
@@ -147,12 +148,14 @@ if __name__ == '__main__':
     valid_ncands_limit = np.inf
 
     problem_folders = {
-        'MTSP_ori': 'MTSP_ori/9_3',
-        'MTSP_ori_10w': 'MTSP_ori_10w/9_3',
-        'minmax-mtsp': 'minmax-mtsp/9_3',
-        'minmax-mtsp_10w': 'minmax-mtsp_10w/9_3',
+        'Standard_MTSP': 'Standard_MTSP/9_3',
+        'Standard_MTSP_10w': 'Standard_MTSP_10w/9_3',
+        'MinMax_MTSP': 'MinMax_MTSP/9_3',
+        'MinMax_MTSP_10w': 'MinMax_MTSP_10w/9_3',
+        'Bounded_MTSP': 'Bounded_MTSP/12_3',
+        'Bounded_MTSP_10w': 'Bounded_MTSP_10w/12_3'
     }
-    
+
     problem_folder = problem_folders[args.problem]
 
     running_dir = f"trained_models/{args.problem}/{args.model}/{args.seed}"
