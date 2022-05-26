@@ -7,76 +7,112 @@ Haojian Liang, Shaohua Wang, Huilai Li
 See installation instructions [here](INSTALL.md).
 
 ## Running the experiments
-
-### MTSP_2w
-```
 # Generate MILP instances
-python 01_generate_instances.py MTSP_ori
+```
+python 01_generate_instances.py Standard_MTSP
+python 01_generate_instances.py MinMax_MTSP
+python 01_generate_instances.py Bounded_MTSP
+```
+
+### Standard_MTSP(2W Training set)
+```
 # Generate supervised learning datasets
-python 02_generate_datasets.py MTSP_ori -j 4  # number of available CPUs
+python 02_generate_datasets.py Standard_MTSP -j 4  # number of available CPUs
 # Training
 for i in {0..4}
 do
-    python 03_train_gcnn.py MTSP_ori -m baseline -s $i
-    python 03_train_gcnn.py MTSP_ori -m attention -s $i
-    python 03_train_competitor.py MTSP_ori -m extratrees -s $i
-    python 03_train_competitor.py MTSP_ori -m svmrank -s $i
-    python 03_train_competitor.py MTSP_ori -m lambdamart -s $i
+    python 03_train_gcnn.py Standard_MTSP -m baseline -s $i
+    python 03_train_gcnn.py Standard_MTSP -m attention -s $i
+    python 03_train_competitor.py Standard_MTSP -m extratrees -s $i
+    python 03_train_competitor.py Standard_MTSP -m svmrank -s $i
+    python 03_train_competitor.py Standard_MTSP -m lambdamart -s $i
 done
 # Test
 python 04_test.py MTSP_ori
 ```
 
-### MTSP_10w
+### Standard_MTSP(10W Training set)
 ```
 # Generate supervised learning datasets
-python 02_generate_datasets.py MTSP_ori_10w -j 4  # number of available CPUs
+python 02_generate_datasets.py Standard_MTSP_10w -j 4  # number of available CPUs
 # Training
 for i in {0..4}
 do
-    python 03_train_gcnn.py MTSP_ori -m baseline -s $i
-    python 03_train_gcnn.py MTSP_ori -m attention -s $i
-    python 03_train_competitor.py MTSP_ori -m extratrees -s $i
-    python 03_train_competitor.py MTSP_ori -m svmrank -s $i
-    python 03_train_competitor.py MTSP_ori -m lambdamart -s $i
+    python 03_train_gcnn.py Standard_MTSP_10w -m baseline -s $i
+    python 03_train_gcnn.py Standard_MTSP_10w -m attention -s $i
+    python 03_train_competitor.py Standard_MTSP_10w -m extratrees -s $i
+    python 03_train_competitor.py Standard_MTSP_10w -m svmrank -s $i
+    python 03_train_competitor.py Standard_MTSP_10w -m lambdamart -s $i
 done
 # Test
-python 04_test.py MTSP_ori
+python 04_test.py Standard_MTSP_10w
 ```
-### minmax-mtsp_2w
+### MinMax_MTSP（2W Training set）
 ```
-# Generate MILP instances
-python 01_generate_instances.py minmax-mtsp
 # Generate supervised learning datasets
-python 02_generate_datasets.py minmax-mtsp -j 4  # number of available CPUs
+python 02_generate_datasets.py MinMax_MTSP -j 4  # number of available CPUs
 # Training
 for i in {0..4}
 do
-    python 03_train_gcnn.py minmax-mtsp -m baseline -s $i
-    python 03_train_gcnn.py minmax-mtsp -m attention -s $i
-    python 03_train_competitor.py minmax-mtsp -m extratrees -s $i
-    python 03_train_competitor.py minmax-mtsp -m svmrank -s $i
-    python 03_train_competitor.py minmax-mtsp -m lambdamart -s $i
+    python 03_train_gcnn.py MinMax_MTSP -m baseline -s $i
+    python 03_train_gcnn.py MinMax_MTSP -m attention -s $i
+    python 03_train_competitor.py MinMax_MTSP -m extratrees -s $i
+    python 03_train_competitor.py MinMax_MTSP -m svmrank -s $i
+    python 03_train_competitor.py MinMax_MTSP -m lambdamart -s $i
 done
 # Test
-python 04_test.py MTSP_ori
+python 04_test.py MinMax_MTSP
 ```
 
-### minmax-mtsp_10w
+### MinMax_MTSP（10W Training set）
 ```
 # Generate supervised learning datasets
-python 02_generate_datasets.py minmax-mtsp_10w -j 4  # number of available CPUs
+python 02_generate_datasets.py MinMax_MTSP_10w -j 4  # number of available CPUs
 # Training
 for i in {0..4}
 do
-    python 03_train_gcnn.py minmax-mtsp_10w -m baseline -s $i
-    python 03_train_gcnn.py minmax-mtsp_10w -m attention -s $i
-    python 03_train_competitor.py minmax-mtsp_10w -m extratrees -s $i
-    python 03_train_competitor.py minmax-mtsp_10w -m svmrank -s $i
-    python 03_train_competitor.py minmax-mtsp_10w -m lambdamart -s $i
+    python 03_train_gcnn.py MinMax_MTSP_10w -m baseline -s $i
+    python 03_train_gcnn.py MinMax_MTSP_10w -m attention -s $i
+    python 03_train_competitor.py MinMax_MTSP_10w -m extratrees -s $i
+    python 03_train_competitor.py MinMax_MTSP_10w -m svmrank -s $i
+    python 03_train_competitor.py MinMax_MTSP_10w -m lambdamart -s $i
 done
 # Test
-python 04_test.py MTSP_ori
+python 04_test.py MinMax_MTSP
+```
+
+### Bounded_MTSP（2W Training set）
+```
+# Generate supervised learning datasets
+python 02_generate_datasets.py Bounded_MTSP -j 4  # number of available CPUs
+# Training
+for i in {0..4}
+do
+    python 03_train_gcnn.py Bounded_MTSP -m baseline -s $i
+    python 03_train_gcnn.py Bounded_MTSP -m attention -s $i
+    python 03_train_competitor.py Bounded_MTSP -m extratrees -s $i
+    python 03_train_competitor.py Bounded_MTSP -m svmrank -s $i
+    python 03_train_competitor.py Bounded_MTSP -m lambdamart -s $i
+done
+# Test
+python 04_test.py Bounded_MTSP
+```
+
+### Bounded_MTSP（10W Training set）
+```
+# Generate supervised learning datasets
+python 02_generate_datasets.py Bounded_MTSP_10w -j 4  # number of available CPUs
+# Training
+for i in {0..4}
+do
+    python 03_train_gcnn.py Bounded_MTSP_10w -m baseline -s $i
+    python 03_train_gcnn.py Bounded_MTSP_10w -m attention -s $i
+    python 03_train_competitor.py Bounded_MTSP_10w -m extratrees -s $i
+    python 03_train_competitor.py Bounded_MTSP_10w -m svmrank -s $i
+    python 03_train_competitor.py Bounded_MTSP_10w -m lambdamart -s $i
+done
+# Test
+python 04_test.py Bounded_MTSP_10w
 ```
 
 ## Citation
