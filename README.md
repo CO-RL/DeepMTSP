@@ -7,8 +7,8 @@ Haojian Liang, Shaohua Wang, Huilai Li
 See installation instructions [here](INSTALL.md).
 
 ## Running the experiments
-# Generate MILP instances
 ```
+# Generate MILP instances
 python 01_generate_instances.py Standard_MTSP
 python 01_generate_instances.py MinMax_MTSP
 python 01_generate_instances.py Bounded_MTSP
