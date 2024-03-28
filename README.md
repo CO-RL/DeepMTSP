@@ -1,4 +1,4 @@
-# Graph Convolutional Neural Network with Attention Model to Solve Multiple Traveling Salesman Problems
+# BiGNN:  Bipartite Graph Neural Network with Attention Mechanism for Solving Multiple Traveling Salesman Problems in Urban Logistics
 
 Haojian Liang, Shaohua Wang, Huilai Li
 
